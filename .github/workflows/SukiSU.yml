@@ -20,15 +20,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
 
-      - name: Download Clang Toolchain (AOSP Clang)
+      - name: Download Clang Toolchain (ZyCromerZ Clang 14)
         run: |
           mkdir clang
-          cd clang
-          # 下载适合 Pixel 5 4.19 内核的 Clang (r450784d 是一个常用的稳定版本，也可使用最新版)
-          wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r450784d.tar.gz
-          tar -xzf clang-*.tar.gz
-          cd ..
+          # 使用 ZyCromerZ 的预编译 Clang 14.0.0 (与 r450784d 版本相近/兼容)
+          wget "https://github.com/ZyCromerZ/Clang/releases/download/14.0.6-20250704-release/Clang-14.0.6-20250704.tar.gz" -O clang.tar.gz
+          tar -C clang/ -zxf clang.tar.gz
+          
+          # 设置环境变量
           echo "CLANG_PATH=$PWD/clang/bin" >> $GITHUB_ENV
+          
+          # 验证版本
+          ./clang/bin/clang --version
 
       - name: Clone Kernel Source
         run: |
